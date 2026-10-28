@@ -18,16 +18,12 @@ A versão 1.0.1 configura o processador de mixins para as fontes de cliente,
 declara `djinns.client.refmap.json` e verifica esse mapa no JAR de distribuição
 durante `build`. A possessão continua implementada.
 
-Para reparar o JAR 1.0.0 já compilado, há um pacote separado de correção em
-`dist/djinns-1.21.1-corretor-de-entrada.zip`. Extraia-o, abra
-`Corrigir-Djinns.bat` e selecione o JAR do mod. O arquivo `-corrigido.jar` é
-criado sem sobrescrever o original. Feche o jogo, mova a versão antiga para
-fora de `mods` e coloque somente a corrigida. **`Corrigir-Djinns.jar` é uma
-ferramenta de reparo: não coloque essa ferramenta em `mods`.**
-
-O corretor passou por sete testes de integridade/preservação de JARs de exemplo.
-O teste no jogo e no JAR específico do usuário ainda está pendente; se preferir
-receber o mod já reparado, envie o JAR instalado para que ele seja corrigido.
+O corretor separado foi retirado do link de distribuição após um alerta do
+Windows Defender relatado pelo usuário. A causa desse alerta não foi confirmada.
+Não é necessário executar um corretor nem alterar a proteção do Windows.
+Para reparar diretamente a instalação afetada, é necessário fornecer o JAR
+original do mod. Os arquivos recebidos até agora são relatórios de desconexão;
+o projeto-fonte não contém o JAR compilado usado no computador do usuário.
 
 Código, modelos Java, texturas originais, receitas, loot e traduções incluídos.
 **A compilação e os testes no Minecraft ainda não foram concluídos:** a política
