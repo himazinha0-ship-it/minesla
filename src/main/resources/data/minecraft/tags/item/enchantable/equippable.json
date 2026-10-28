@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "djinns:desert_helmet",
+    "djinns:desert_chestplate",
+    "djinns:desert_leggings",
+    "djinns:desert_boots"
+  ]
+}

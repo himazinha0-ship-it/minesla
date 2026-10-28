@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/shield",
+  "textures": {
+    "particle": "djinns:entity/desert_shield"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "blocking": 1
+      },
+      "model": "djinns:item/desert_shield_blocking"
+    }
+  ]
+}

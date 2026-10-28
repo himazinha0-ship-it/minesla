@@ -1,153 +1,123 @@
-# Djinns: Espíritos do Deserto — Fabric 1.21.1
+# Djinns: Espíritos do Deserto — 1.1.0
 
-Projeto para **Minecraft Java 1.21.1**, Fabric Loader **0.16.14+**, Fabric API
-**0.116.6+1.21.1** e **JDK 21**. Instale no cliente e no servidor.
-Não é para Bedrock, Forge ou NeoForge.
+Mod para **Minecraft Java 1.21.1**, **Fabric Loader 0.16.14+**, **Fabric API para
+1.21.1** e **Java 21**. Instale a mesma versão do mod no cliente e no servidor.
 
-**Somente mobs e itens. Não gera cidades, palácios nem `djin_city_capital`,
-conforme a correção de escopo.**
+[Baixar o JAR 1.1.0](dist/djinns-fabric-1.21.1-1.1.0.jar) ·
+[Baixar o ZIP contendo o mod](dist/djinns-fabric-1.21.1-1.1.0.zip)
 
-## Estado da entrega
+## Atualização 1.1.0
 
-### Correção de entrada no mundo — 1.0.1
+- **Vila dos djinns no deserto:** estrutura `djinns:djin_city_capital`, com
+  97 × 97 blocos de área, muralhas, entrada com estátuas, mercado, casas,
+  canais, pontes, fontes, palmeiras, minaretes e um palácio com cúpula turquesa.
+  A composição é inspirada na referência de cidade, adaptada à escala de uma
+  vila de Minecraft. São 29 moradores, incluindo todas as 16 variantes e um rei.
+- **Rei maior:** escala visual 2,05, altura de colisão de cinco blocos e largura
+  de 1,4. O modelo ganhou coroa, joias, lamelas nas ombreiras, corrente,
+  manoplas, tabardo e capa. A malha completa tem 97 cuboides, contando as peças
+  compartilhadas e as exclusivas. A textura do rei foi refeita.
+- **Espada real tridimensional:** 80 elementos com núcleo escuro, lâmina e
+  chamas ciano, guarda dourada com detalhes em marfim e cabo escuro. O atlas
+  de textura tem seis quadros com interpolação. O desenho é inspirado na
+  espada de referência; não é uma cópia pixel a pixel da imagem.
+- **Dano básico total da espada: 10**, antes de armadura e encantamentos.
+  O modificador de +9 soma ao ataque básico de 1. O rei também usa base 1,
+  incluindo migração desse atributo quando um rei salvo é carregado. O fogo
+  da espada permanece uma fonte adicional de dano ao longo do tempo.
+- **Animações:** o ciclo de golpe do rei dura 18 ticks (0,9 s a 20 TPS), com
+  curvas quinticas de preparação, corte e recuperação. Braços e antebraços
+  articulam, e a espada acompanha a mão. Corpo, cauda de quatro segmentos e
+  capa usam ondas contínuas. A conjuração entra e sai gradualmente.
+- O golpe em arco do rei causa 10 de dano básico, tem alcance frontal de até
+  4,4 blocos e intervalo de 28 ticks. Fendas e guardas invocados permanecem.
 
-Os seis relatórios enviados confirmaram `KeyboardInputMixin`: o seletor `tick`
-ficou sem o refmap que o traduz para `method_3129(ZF)V` no Minecraft instalado.
-A mensagem de desconexão é consequência dessa falha de carregamento do cliente.
-A versão 1.0.1 configura o processador de mixins para as fontes de cliente,
-declara `djinns.client.refmap.json` e verifica esse mapa no JAR de distribuição
-durante `build`. A possessão continua implementada.
+## Instalar
 
-### JAR original corrigido diretamente
+1. Feche o Minecraft.
+2. Mova a cópia antiga de Djinns para uma pasta de backup fora de `mods`.
+3. Coloque **`djinns-fabric-1.21.1-1.1.0.jar`** em `mods`. Deixe apenas uma cópia
+   de Djinns e mantenha o Fabric API para Minecraft 1.21.1 instalado.
+4. Abra o perfil Fabric de Minecraft **1.21.1**.
 
-[Baixar o mod corrigido](dist/djinns-fabric-1.21.1-1.0.0-corrigido.jar)
+O ZIP contém o JAR, instruções e checksum. Extraia o ZIP e coloque o **JAR**
+em `mods`. Não há corretor, instalador, arquivo BAT ou ferramenta adicional.
 
-Feche o Minecraft, mova a cópia antiga de Djinns para fora de `mods` e coloque
-somente o JAR corrigido nessa pasta. Mantenha o Fabric API instalado.
-Não é necessário executar ferramenta adicional.
+## Encontrar a vila
 
-O arquivo foi reparado a partir do JAR fornecido pelo usuário. Ele já continha
-`client-djinns-fabric-1.21.1-refmap.json`; faltava declarar esse nome na
-configuração `djinns.client.mixins.json`. Essa foi a única entrada alterada:
-as 12 classes e 33 texturas, assim como todos os demais arquivos, foram
-preservados byte a byte. A integridade e a referência de mixin foram verificadas.
-A criação de um mundo dentro do Minecraft ainda precisa ser validada.
+A geração natural acontece somente no **deserto**, em terreno ainda não gerado.
+Uma atualização não constrói a vila retroativamente em chunks existentes.
+Ela ocupa 97 × 97 blocos e contém um rei persistente no palácio.
 
-O corretor separado foi retirado do link de distribuição após um alerta do
-Windows Defender relatado pelo usuário. A causa desse alerta não foi confirmada.
-Não é necessário executar o corretor nem alterar a proteção do Windows.
-
-O JAR disponível acima é o reparo direto da versão 1.0.0 recebida. A compilação
-integral do projeto-fonte 1.0.1 neste ambiente continua bloqueada pelo acesso
-às dependências Fabric. O ZIP de projeto-fonte não deve ser colocado em `mods`.
-
-## Compilar e instalar
-
-1. Instale **JDK 21 completo**. Confirme `java -version` e `javac -version`;
-   configure `JAVA_HOME` para esse JDK.
-2. Extraia o projeto e abra um terminal na pasta de `build.gradle`.
-3. Linux/macOS: `chmod +x gradlew && ./gradlew build`.
-   Windows: `gradlew.bat build`.
-4. Após um build bem-sucedido, copie
-   `build/libs/djinns-fabric-1.21.1-1.0.1.jar` para `.minecraft/mods`.
-   Não use o arquivo `-sources.jar`.
-5. Instale Fabric Loader 0.16.14+ para Minecraft **1.21.1** e
-   [Fabric API para 1.21.1](https://modrinth.com/mod/fabric-api/versions?g=1.21.1).
-6. Em multiplayer, instale os dois mods também no servidor Fabric.
-
-O wrapper confere o SHA-256 do Gradle. Preserve TLS e checksums.
-Desenvolvimento: `./gradlew runClient` ou `./gradlew runServer`. A EULA do
-servidor precisa ser aceita pelo administrador em `run/eula.txt`.
-Não há dependência de GeckoLib. Pillow só é necessário para regenerar a arte
-com `python3 tools/generate_assets.py`; não é necessário para compilar ou jogar.
-
-## Funcionalidades implementadas no código
-
-- **16 djinns**: quatro cores × comum, comerciante, guarda e mago, mais o rei.
-- **Azul:** combate físico; o mago aplica Fraqueza à distância.
-- **Vermelho:** fogo ao acertar e bolas de fogo reais de blaze à distância.
-- **Branco:** Levitação por 3 segundos ao acertar.
-- **Negro:** Lentidão II e Escuridão por 5 segundos ao acertar.
-- Todos flutuam, não sofrem dano de queda e começam neutros. Vermelhos resistem
-  a fogo. Ao receber dano, chamam aliados de todas as cores até 32 blocos.
-  A hostilidade dura 30 s, renovável por dano. Criativo e Espectador são imunes.
-- Um golpe corpo a corpo de jogador que cause dano tem **15% de chance** de
-  causar **Possessão por 100 ticks (5 s a 20 TPS)**, Cegueira e Náusea.
-  O cliente substitui o movimento; o servidor força ataques contra criaturas
-  visíveis aleatórias até 2,8 blocos. Os ataques involuntários não atingem
-  jogadores. Projéteis não causam possessão; o efeito não se acumula.
-- Guardas portam lança ou espada flamejante, escudo e peitoral do deserto.
-  Têm 25% de chance de bloquear dano vindo pela frente.
-- Comuns, comerciantes e magos abrem a interface vanilla de trocas por
-  **lápis-lazúli**. Guardas e o rei não negociam. Há 13 profissões inspiradas nos
-  aldeões, níveis 1–5 e reposição diária. Novas ofertas de nível aparecem após
-  fechar e reabrir a tela. Antes da primeira troca, clique segurando uma bancada
-  para mudar de profissão, sem consumir o bloco. Magos não mudam de profissão.
-  Não há simulação completa de aldeia, reprodução ou reputação.
-- O rei tem **300 de vida**, barra de chefe, espada ciano flamejante, golpes em
-  arco com recuo e animações interpoladas. Fendas verticais de partículas
-  invocam guardas após 1,5 s de preparação. Até seis invocados ficam próximos;
-  desaparecem após 60 s, sem loot/XP. Abaixo de meia vida, as fendas aceleram.
-- Arte original inspirada nas referências: cauda segmentada animada, olhos
-  emissivos, turbantes, braceletes, faixas por papel e ombreiras do rei.
-  É uma interpretação em blocos, não uma reprodução exata das imagens.
-
-## Encontrar e invocar
-
-As 16 variantes entram na geração de criaturas dos desertos, sobre areia e
-com luz acima de 8. A aparição depende dos limites vanilla de criaturas.
-Sem cidade nesta versão, o rei é acessível por ovo criativo ou comando.
-Todos os itens e ovos estão na aba **Djinns: Espíritos do Deserto**.
+Com cheats ou permissão de operador:
 
 ```mcfunction
-/summon djinns:blue_common_djinn ~ ~1 ~
-/summon djinns:red_guard_djinn ~ ~1 ~
-/summon djinns:white_merchant_djinn ~ ~1 ~
-/summon djinns:black_mage_djinn ~ ~1 ~
-/summon djinns:djinn_king ~ ~1 ~
-/function djinns:kit
-/function djinns:showcase
+/locate structure djinns:djin_city_capital
 ```
 
-Use `blue`, `red`, `white` ou `black` e `common`, `merchant`, `guard` ou `mage`
-para obter os demais IDs. `showcase` invoca as 16 variantes numa grade sem
-construir blocos nem invocar o rei. `kit` fornece equipamentos e lápis-lazúli.
-Use uma área aberta num mundo de testes.
+Para colocação manual, em uma área aberta do deserto:
 
-## Profissões
+```mcfunction
+/place structure djinns:djin_city_capital ~ ~ ~
+```
 
-| Profissão | Bancada segurada | Exemplos de ofertas |
-|---|---|---|
-| Fazendeiro | Composteira | Pão, cenoura dourada |
-| Pescador | Barril | Peixe cozido, vara |
-| Pastor | Tear | Lã, cama |
-| Flecheiro | Mesa de arquearia | Flechas, arco |
-| Bibliotecário | Atril | Livros, estantes |
-| Cartógrafo | Mesa de cartografia | Mapas, bússola |
-| Clérigo | Suporte de poções | Redstone, pedra luminosa |
-| Armeiro | Alto-forno | Turbante, botas |
-| Ferreiro de armas | Rebolo | Lança, espada |
-| Ferreiro de ferramentas | Mesa de ferraria | Picareta, machado |
-| Açougueiro | Defumador | Carnes cozidas |
-| Curtidor | Caldeirão | Couro, sela |
-| Pedreiro | Cortador de pedras | Arenito, terracota |
+A vila é uma estrutura vanilla jigsaw de uma peça, sem geração customizada de
+blocos por código do servidor. Suas casas têm postos de trabalho e baús com
+lápis-lazúli, ouro, comida e chance de pergaminhos.
 
-Mestres desbloqueiam equipamentos e pergaminhos. Magos são bibliotecários
-arcanos com um catálogo próprio.
+## Funcionalidades mantidas
 
-## Pergaminhos e equipamento
+- Quatro cores (azul, vermelho, branco, negro) × quatro papéis (comum,
+  comerciante, guarda, mago), além do rei. Os ovos estão na aba criativa Djinns.
+- Djinns neutros e flutuantes; dano chama aliados em até 32 blocos por 30 s.
+- Vermelhos usam fogo e projéteis de blaze. Brancos aplicam Levitação.
+  Negros aplicam Lentidão II e Escuridão. Magos têm ataques à distância.
+- Golpes corpo a corpo de jogador têm 15% de chance de causar Possessão,
+  Cegueira e Náusea por cinco segundos. O movimento é involuntário e o jogador
+  ataca criaturas próximas; esses ataques forçados não atingem jogadores.
+- Comuns, comerciantes e magos negociam por lápis-lazúli na interface vanilla.
+  Há 13 profissões, níveis de comércio, reposição diária e quatro pergaminhos.
+- Guardas usam lança/espada, escudo e armadura. O rei mantém barra de chefe,
+  300 de vida, invocação por fendas e maior frequência de invocação a meia vida.
+- A correção de entrada no mundo é preservada: o mixin de possessão declara
+  o refmap que resolve o método de movimento na instalação de Minecraft.
 
-Botão direito usa e consome um pergaminho, exceto no Criativo. Intervalo de
-5 segundos por tipo.
+Comandos de teste existentes:
 
-| Pergaminho | Efeito |
-|---|---|
-| Chama | Resistência ao fogo por 60 s; incendeia criaturas visíveis até 5 blocos |
-| Vento | Levitação por 3 s e Queda lenta por 20 s |
-| Sombra | Invisibilidade e Visão noturna por 30 s |
-| Proteção | Remove possessão, cegueira e náusea; Resistência 30 s e Regeneração 5 s |
+```mcfunction
+/function djinns:kit
+/function djinns:showcase
+/summon djinns:djinn_king ~ ~1 ~
+```
 
-Lança, espada flamejante, escudo e armadura têm receitas em
-`src/main/resources/data/djinns/recipe`, além de ofertas e acesso criativo.
-O rei deixa sua espada ao morrer. Ela incendeia por 5 s; abrir fendas é uma
-habilidade exclusiva do chefe, não da arma nas mãos do jogador.
+## Validação e limites
+
+O JAR 1.1.0 foi construído sobre o JAR corrigido fornecido pelo usuário.
+Novas classes auxiliares foram compiladas com JDK 21. Uma etapa interna de
+build aplica as mudanças de geometria, atributos e animação ao bytecode já
+remapeado; essa ferramenta interna não faz parte do mod distribuído.
+
+Passaram: análise de bytecode das 14 classes/112 métodos; execução JVM do
+método de golpe; 9.608 amostras de continuidade de animação; 1.448 poses do
+modelo real executadas com substitutos estreitos da API de modelos; leitura
+independente do NBT da vila, conferência dos 29 moradores sem interseção com
+blocos, vínculos de worldgen/loot; recursos e refmap do JAR final.
+
+**Não foi executado um cliente ou servidor Minecraft completo neste ambiente.**
+A geração no jogo, negociação, combate e sincronização multiplayer ainda
+precisam de teste dentro do Minecraft. As prévias exportadas em `build/previews`
+são renderizações dos modelos, não capturas do jogo.
+
+## Fontes e reprodução
+
+O projeto usa Java 21 e Fabric Loom 1.7.4. Em uma máquina com acesso às
+bibliotecas Fabric/Mojang, o fluxo de desenvolvimento é `./gradlew build`,
+`./gradlew runClient` e `./gradlew runServer`. O build confere o refmap de
+produção para impedir a regressão do erro de entrada no mundo.
+
+Os passos usados para o JAR incremental desta entrega estão em `tools/update`:
+`generate_update.py`, `BuildUpdate.java`, `VerifyBytecode.java`, `PoseChecks.java`,
+`test_model_runtime.py` e `check_capital.py`. Arte e NBT são gerados localmente;
+Pillow e NumPy são ferramentas de desenvolvimento e não dependências do mod.
+A compilação integral por Gradle permanece bloqueada neste ambiente pelo
+acesso às dependências Fabric. O JAR incremental não depende desse download.

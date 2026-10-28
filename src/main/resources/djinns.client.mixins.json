@@ -1,0 +1,8 @@
+{
+  "required": true,
+  "package": "dev.minesla.djinn.mixin",
+  "refmap": "djinns.client.refmap.json",
+  "compatibilityLevel": "JAVA_21",
+  "client": ["KeyboardInputMixin"],
+  "injectors": {"defaultRequire": 1}
+}

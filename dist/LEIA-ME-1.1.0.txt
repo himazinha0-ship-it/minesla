@@ -1,0 +1,29 @@
+DJINNS 1.1.0 - FABRIC - MINECRAFT JAVA 1.21.1
+
+1. Feche o Minecraft.
+2. Mova a versao antiga de Djinns para fora da pasta mods.
+3. Coloque djinns-fabric-1.21.1-1.1.0.jar em mods.
+4. Mantenha Fabric API para 1.21.1 instalado; use Java 21 e Fabric Loader 0.16.14+.
+5. Deixe apenas UMA copia do mod Djinns instalada.
+
+NOVIDADES
+- Vila de 97 x 97 blocos no deserto, com palacio e 29 moradores, incluindo o rei.
+- Rei com aproximadamente cinco blocos de altura, nova armadura/coroa/textura.
+- Espada real com modelo 3D e textura animada inspirados na referencia.
+- Dano basico total da espada: 10 antes de armadura e encantamentos.
+- Animacao do golpe em 18 ticks, antebracos articulados, capa e cauda fluidas.
+- Mobs, trocas, pergaminhos, possessao e fendas anteriores foram preservados.
+
+A vila aparece em regioes de deserto ainda NAO geradas. Em um mundo existente,
+explore areas novas. Para localizar com cheats/permissao:
+/locate structure djinns:djin_city_capital
+
+Para colocar manualmente em area aberta do deserto:
+/place structure djinns:djin_city_capital ~ ~ ~
+
+O ZIP e somente uma embalagem para o mod. Extraia e use o JAR em mods.
+Nao existe instalador nem corretor adicional neste pacote.
+
+O arquivo e seus modelos, curvas de animacao e dados de estrutura foram
+verificados automaticamente. O teste completo dentro do Minecraft ainda nao
+foi executado neste ambiente. Guarde uma copia da versao antiga fora de mods.

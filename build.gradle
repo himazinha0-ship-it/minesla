@@ -1,0 +1,63 @@
+plugins {
+    id 'fabric-loom' version '1.7.4'
+    id 'maven-publish'
+}
+
+version = '1.1.0'
+group = 'dev.minesla'
+base { archivesName = 'djinns-fabric-1.21.1' }
+
+repositories { mavenCentral() }
+loom {
+    splitEnvironmentSourceSets()
+    mixin {
+        useLegacyMixinAp = true
+        add sourceSets.client, 'djinns.client.refmap.json'
+    }
+    mods {
+        djinns {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+}
+dependencies {
+    minecraft 'com.mojang:minecraft:1.21.1'
+    mappings 'net.fabricmc:yarn:1.21.1+build.3:v2'
+    modImplementation 'net.fabricmc:fabric-loader:0.16.14'
+    modImplementation 'net.fabricmc.fabric-api:fabric-api:0.116.6+1.21.1'
+}
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand 'version': project.version }
+}
+tasks.withType(JavaCompile).configureEach { options.release = 21 }
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+jar { from('LICENSE') { rename { "${it}_${project.base.archivesName.get()}" } } }
+
+// A dev launch can accept named selectors that fail in an installed, remapped JAR.
+// Check the actual distribution, including the refmap generated for the client sources.
+tasks.register('verifyMixinRefmap') {
+    dependsOn tasks.named('remapJar')
+    doLast {
+        def jarFile = tasks.named('remapJar').get().archiveFile.get().asFile
+        new java.util.zip.ZipFile(jarFile).withCloseable { zip ->
+            def json = new groovy.json.JsonSlurper()
+            def config = json.parse(zip.getInputStream(zip.getEntry('djinns.client.mixins.json')))
+            if (config.refmap != 'djinns.client.refmap.json' || zip.getEntry(config.refmap) == null) {
+                throw new GradleException('The distribution is missing its client mixin refmap.')
+            }
+            def refmap = json.parse(zip.getInputStream(zip.getEntry(config.refmap)))
+            def selectors = refmap.mappings['dev/minesla/djinn/mixin/KeyboardInputMixin']
+            def target = selectors?.get('tick(ZF)V')
+            if (target == null || !target.contains('method_3129(ZF)V')) {
+                throw new GradleException('KeyboardInput.tick(ZF)V was not remapped for Minecraft 1.21.1.')
+            }
+        }
+    }
+}
+tasks.named('build') { dependsOn tasks.named('verifyMixinRefmap') }

@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "djinns:desert_spear",
+    "djinns:djinn_flame_sword",
+    "djinns:royal_sword",
+    "djinns:desert_helmet",
+    "djinns:desert_chestplate",
+    "djinns:desert_leggings",
+    "djinns:desert_boots",
+    "djinns:desert_shield"
+  ]
+}

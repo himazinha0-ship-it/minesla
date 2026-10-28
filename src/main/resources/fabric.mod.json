@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "djinns",
+  "version": "${version}",
+  "name": "Djinns: Spirits of the Desert",
+  "description": "Desert djinn capital, a monumental king, articulated animations and a ten-damage voxel Riftblade.",
+  "authors": [
+    "minesla"
+  ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.minesla.djinn.Djinns"
+    ],
+    "client": [
+      "dev.minesla.djinn.client.DjinnClient"
+    ]
+  },
+  "mixins": [
+    {
+      "config": "djinns.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
