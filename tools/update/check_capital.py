@@ -36,6 +36,7 @@ expected={f'djinns:{c}_{r}_djinn' for c in ['blue','red','white','black'] for r 
 assert expected<=set(ids)
 for e in residents:
     x,y,z=e['pos'];assert e['nbt']['PersistenceRequired']==1
+    assert e['nbt']['NoGravity']==0, 'City residents must use ground navigation'
     king=e['nbt']['id']=='djinns:djinn_king';half=.7 if king else .35;height=5 if king else 2.25
     for bx in range(math.floor(x-half),math.ceil(x+half)):
         for by in range(math.floor(y),math.ceil(y+height)):

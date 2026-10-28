@@ -1,10 +1,23 @@
-# Djinns: Espíritos do Deserto — 1.1.0
+# Djinns: Espíritos do Deserto — 1.1.1
 
 Mod para **Minecraft Java 1.21.1**, **Fabric Loader 0.16.14+**, **Fabric API para
 1.21.1** e **Java 21**. Instale a mesma versão do mod no cliente e no servidor.
 
-[Baixar o JAR 1.1.0](dist/djinns-fabric-1.21.1-1.1.0.jar) ·
-[Baixar o ZIP contendo o mod](dist/djinns-fabric-1.21.1-1.1.0.zip)
+[Baixar o JAR 1.1.1](dist/djinns-fabric-1.21.1-1.1.1.jar) ·
+[Baixar o ZIP contendo o mod](dist/djinns-fabric-1.21.1-1.1.1.zip)
+
+## Correções 1.1.1
+
+- A busca da capital consulta os candidatos entre ticks, com até 128 candidatos
+  e 30 segundos por busca. Confirma o início real da estrutura e aceita
+  `/djinns cancelar`. O comando `/djinns locate` usa a mesma busca.
+- A espada foi alinhada ao centro da palma, com a lâmina para cima; a
+  articulação do antebraço e as animações anteriores foram mantidas.
+- Em combate, o rei procura chão livre para até três guardas por onda,
+  alternando as quatro cores. A primeira onda chega em cerca de três segundos
+  a 20 TPS. Há limite de seis invocados ativos próximos ao rei.
+- Os djinns usam navegação terrestre e gravidade, mantendo a animação visual
+  de flutuação junto ao chão. Isso também se aplica aos djinns já salvos.
 
 ## Atualização 1.1.0
 
@@ -36,7 +49,7 @@ Mod para **Minecraft Java 1.21.1**, **Fabric Loader 0.16.14+**, **Fabric API par
 
 1. Feche o Minecraft.
 2. Mova a cópia antiga de Djinns para uma pasta de backup fora de `mods`.
-3. Coloque **`djinns-fabric-1.21.1-1.1.0.jar`** em `mods`. Deixe apenas uma cópia
+3. Coloque **`djinns-fabric-1.21.1-1.1.1.jar`** em `mods`. Deixe apenas uma cópia
    de Djinns e mantenha o Fabric API para Minecraft 1.21.1 instalado.
 4. Abra o perfil Fabric de Minecraft **1.21.1**.
 
@@ -54,6 +67,10 @@ Com cheats ou permissão de operador:
 ```mcfunction
 /locate structure djinns:djin_city_capital
 ```
+
+Para interromper: `/djinns cancelar`. Se a busca atingir seu limite sem
+confirmar uma cidade, aproxime-se de um deserto e tente novamente. O resultado
+vem de uma estrutura confirmada; não promete a capital mais próxima de todo o mundo.
 
 Para colocação manual, em uma área aberta do deserto:
 
@@ -92,16 +109,16 @@ Comandos de teste existentes:
 
 ## Validação e limites
 
-O JAR 1.1.0 foi construído sobre o JAR corrigido fornecido pelo usuário.
+O JAR 1.1.1 atualiza o JAR 1.1.0, construído sobre o JAR corrigido fornecido pelo usuário.
 Novas classes auxiliares foram compiladas com JDK 21. Uma etapa interna de
 build aplica as mudanças de geometria, atributos e animação ao bytecode já
 remapeado; essa ferramenta interna não faz parte do mod distribuído.
 
-Passaram: análise de bytecode das 14 classes/112 métodos; execução JVM do
-método de golpe; 9.608 amostras de continuidade de animação; 1.448 poses do
-modelo real executadas com substitutos estreitos da API de modelos; leitura
-independente do NBT da vila, conferência dos 29 moradores sem interseção com
-blocos, vínculos de worldgen/loot; recursos e refmap do JAR final.
+Passaram nesta versão: análise das 21 classes/163 métodos; 292 verificações
+de comportamento com Brigadier real e substitutos da API; 44 referências
+de API conferidas; execução JVM dos métodos de invocação, navegação e golpe;
+alinhamento da empunhadura nas duas mãos; NBT, recursos e refmap do JAR final.
+Os testes de mundo usam substitutos e não medem desempenho real do Minecraft.
 
 **Não foi executado um cliente ou servidor Minecraft completo neste ambiente.**
 A geração no jogo, negociação, combate e sincronização multiplayer ainda
@@ -121,3 +138,5 @@ Os passos usados para o JAR incremental desta entrega estão em `tools/update`:
 Pillow e NumPy são ferramentas de desenvolvimento e não dependências do mod.
 A compilação integral por Gradle permanece bloqueada neste ambiente pelo
 acesso às dependências Fabric. O JAR incremental não depende desse download.
+As correções 1.1.1 e seus testes estão em `tools/fixes`;
+consulte [as instruções de reprodução](tools/fixes/README.md).

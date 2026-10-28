@@ -1,7 +1,7 @@
 package dev.minesla.djinn;
 
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.control.FlightMoveControl;
+import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.ai.pathing.*;
 import net.minecraft.entity.boss.*;
@@ -42,8 +42,8 @@ public class DjinnEntity extends MerchantEntity {
     public DjinnEntity(EntityType<? extends MerchantEntity> type, World world, int color, int role, boolean king) {
         super(type, world);
         this.color = color; this.role = role; this.king = king;
-        this.moveControl = new FlightMoveControl(this, 18, true);
-        setNoGravity(true);
+        this.moveControl = new MoveControl(this);
+        setNoGravity(false);
         this.experiencePoints = king ? 100 : role == 2 ? 10 : 5;
         setPathfindingPenalty(PathNodeType.WATER, -1);
         setPathfindingPenalty(PathNodeType.DANGER_FIRE, 0);
@@ -62,16 +62,12 @@ public class DjinnEntity extends MerchantEntity {
         builder.add(JOB, 0); builder.add(CAST, 0);
     }
     @Override protected EntityNavigation createNavigation(World world) {
-        BirdNavigation navigation = new BirdNavigation(this, world);
-        navigation.setCanPathThroughDoors(true);
-        navigation.setCanEnterOpenDoors(true);
-        navigation.setCanSwim(false);
-        return navigation;
+        return super.createNavigation(world);
     }
     @Override protected void initGoals() {
         goalSelector.add(0, new SwimGoal(this));
         goalSelector.add(1, new DjinnCombatGoal(this));
-        goalSelector.add(5, new FlyGoal(this, 0.7));
+        goalSelector.add(5, new WanderAroundFarGoal(this, 0.7));
         goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 8));
         goalSelector.add(7, new LookAroundGoal(this));
     }
@@ -102,7 +98,7 @@ public class DjinnEntity extends MerchantEntity {
 
     @Override public void tick() {
         super.tick();
-        setNoGravity(true);
+        setNoGravity(false);
         fallDistance = 0;
         if (getWorld().isClient) {
             if (age % 3 == 0) getWorld().addParticle(particle(), getX() + (random.nextDouble() - .5) * .6,
@@ -203,41 +199,14 @@ public class DjinnEntity extends MerchantEntity {
         bossBar.setPercent(MathHelper.clamp(getHealth() / getMaxHealth(), 0, 1));
         bossBar.setName(getDisplayName());
         bossBar.setVisible(getTarget() != null);
-        if (getTarget() != null && --riftCooldown <= 0 && riftAge < 0) {
-            riftCooldown = getHealth() < getMaxHealth() / 2 ? 180 : 280;
-            riftAge = 0; rifts.clear(); dataTracker.set(CAST, 60);
-            for (int i = 0; i < 3; i++) {
-                double angle = i * Math.PI * 2 / 3 + random.nextDouble();
-                rifts.add(getPos().add(Math.cos(angle) * 4, .2, Math.sin(angle) * 4));
-            }
-            playSound(SoundEvents.ENTITY_EVOKER_PREPARE_SUMMON, 1.5f, .6f);
-        }
-        if (riftAge >= 0) {
-            ServerWorld world = (ServerWorld)getWorld();
-            for (Vec3d center : rifts) {
-                for (int i = 0; i < 12; i++) {
-                    double angle = i * Math.PI / 6 + riftAge * .14;
-                    world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, center.x + Math.cos(angle) * .65,
-                            center.y + 1.2 + Math.sin(angle) * 1.2, center.z, 1, .02, .02, .02, 0);
-                }
-                if (riftAge == 30 && world.getEntitiesByClass(DjinnEntity.class, getBoundingBox().expand(40),
-                        e -> getUuid().equals(e.summoner)).size() < 6) {
-                    DjinnEntity guard = Djinns.TYPES.get("blue_guard_djinn").create(world);
-                    if (guard != null) {
-                        guard.refreshPositionAndAngles(center.x, center.y, center.z, getYaw(), 0);
-                        guard.initialize(world, world.getLocalDifficulty(guard.getBlockPos()), SpawnReason.MOB_SUMMONED, null);
-                        if (world.isSpaceEmpty(guard)) {
-                            guard.summoner = getUuid(); guard.summonLife = 1200;
-                            guard.experiencePoints = 0;
-                            if (getTarget() != null) guard.becomeAngry(getTarget());
-                            world.spawnEntity(guard);
-                        }
-                    }
-                }
-            }
-            if (++riftAge > 60) { riftAge = -1; rifts.clear(); }
-        }
+        dev.minesla.djinn.runtime.RoyalSummons.tick(this);
     }
+
+    public UUID djinns$getSummoner() { return summoner; }
+    public void djinns$bindSummoner(UUID owner, LivingEntity target) {
+        summoner = owner; summonLife = 1200; experiencePoints = 0; becomeAngry(target);
+    }
+    public void djinns$startRoyalCast() { dataTracker.set(CAST, 60); }
 
     @Override public void onStartedTrackingBy(ServerPlayerEntity player) { super.onStartedTrackingBy(player); if (king) bossBar.addPlayer(player); }
     @Override public void onStoppedTrackingBy(ServerPlayerEntity player) { super.onStoppedTrackingBy(player); if (king) bossBar.removePlayer(player); }

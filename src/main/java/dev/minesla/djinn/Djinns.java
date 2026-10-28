@@ -96,6 +96,7 @@ public final class Djinns implements ModInitializer {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) tickPossession(player);
         });
+        dev.minesla.djinn.runtime.CapitalLocate.install();
     }
 
     private static EntityType<DjinnEntity> registerEntity(String name, int color, int role, boolean king) {

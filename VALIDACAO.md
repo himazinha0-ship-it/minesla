@@ -1,61 +1,54 @@
-# Validação da versão 1.1.0
+# Validação da versão 1.1.1
 
-O artefato é uma atualização incremental do JAR 1.0.0 corrigido fornecido pelo
-usuário. Ele inclui a vila no deserto, o rei maior e detalhado, a espada voxel
-animada e as novas curvas de movimento. A declaração do refmap corrigida
-anteriormente foi preservada.
+O JAR atualiza a versão 1.1.0, preservando sua base remapeada e o refmap
+que corrigiu o erro de entrada no mundo. Não inclui instalador ou corretor.
 
-## Verificações concluídas
+## Verificações executadas
 
-- Bytecode: análise de fluxo/pilha das **14 classes e 112 métodos** do JAR.
-- Ciclo de golpe: o método de produção do rei foi carregado e executado pela
-  JVM em uma fixture estreita de superclass, com verificação de frames. O
-  ciclo dura **18 ticks** e djinns comuns continuam delegando ao ciclo do pai.
-- Curvas: **9.608 amostras** verificadas, com valores finitos, continuidade nos
-  keyframes de ataque e recuperação para a pose de repouso; dano básico 10.
-- Modelo: o bytecode real do modelo foi executado com substitutos estreitos
-  da API Minecraft de modelos, em **1.448 poses**. Foram conferidos hierarquia,
-  **97 cuboides**, antebraços, coroa exclusiva do rei e transformação da espada.
-- Estrutura: o NBT foi decodificado por um leitor independente do escritor.
-  Conferidos **60.512 blocos**, limites e índices, os **29 moradores**, todas as
-  16 variantes, exatamente um rei e ausência de blocos nos volumes iniciais
-  das criaturas. Vínculos de biome, structure, structure set, pool e loot válidos.
-- Recursos: **75 JSON, 34 PNG** com CRC/zlib íntegros, modelos/texturas, receitas,
-  traduções PT-BR/inglês e refmap do JAR instalável.
-- Arte: inspeção de prévias extraídas dos dados de geometria efetivamente
-  inseridos no modelo, do modelo voxel da espada e da planta da vila.
-- Fontes: parser Java 21 nos 12 arquivos, sem erros sintáticos. As duas novas
-  classes independentes do Minecraft foram compiladas com JDK 21.
+- 21 classes e 163 métodos: análise ASM de pilha e fluxo.
+- 292 verificações de comportamento: despacho pelo Brigadier real, prioridade
+  do literal da capital sobre o argumento vanilla, consultas assíncronas,
+  futuros incompletos, cancelamento, prazo, limite de 128 candidatos e quatro
+  buscas simultâneas, limpeza ao encerrar servidor e coordenadas de um início
+  de estrutura efetivamente retornado. O mundo é um substituto de teste.
+- 44 referências Minecraft das novas classes: descritores conferidos com
+  Yarn 1.21.1+build.3 ou com referências já presentes no JAR anterior.
+- Métodos reais do JAR carregados e executados pela JVM com substitutos de
+  superclass: identificação do invocador, alvo, duração de 1.200 ticks, zero
+  XP, contador de conjuração 60, delegação de navegação terrestre e golpe de
+  18 ticks. Esses testes não executam a IA real do Minecraft.
+- Invocações com espaço parcialmente bloqueado: três guardas na primeira
+  onda, quatro cores ao longo das ondas, alvo herdado, limite de seis ativos,
+  ausência de invocações sem alvo e tentativa limitada quando tudo está bloqueado.
+- Modelo da espada: matrizes vanilla de item na mão aplicadas às coordenadas
+  do cabo e da lâmina do recurso final. Erro do centro da empunhadura abaixo
+  de 0,01 pixel do modelo nas duas mãos; lâmina alinhada para cima.
+- NBT independente: 60.512 blocos, 29 moradores sem interseção inicial com
+  blocos, todas as variantes, um rei, gravidade habilitada e vínculos de geração.
+- 75 JSON, 34 PNG, 17 entidades, 12 equipamentos/pergaminhos, sete receitas,
+  traduções e refmap no JAR final. Nenhum substituto da API foi incluído no
+  mod. Parser sintático Java 21 nos 15 arquivos de desenvolvimento.
 
-## Limites explícitos
+## Limites
 
-Não foi iniciado um cliente ou servidor Minecraft completo. Os substitutos de
-API e verificações de bytecode não substituem execução real de geração,
-renderização, navegação, combate e sincronização multiplayer. Esses testes
-permanecem necessários. A estrutura foi conferida como dados; sua colocação
-real e desempenho na geração ainda precisam ser observados no Minecraft.
+Não foi possível iniciar um cliente ou servidor Minecraft completo: o acesso
+às dependências Fabric/Mojang permanece bloqueado neste ambiente. A versão
+usa o build incremental reproduzível em `tools/fixes/BuildFixes.java`.
+Os testes acima não comprovam desempenho, renderização ou navegação no jogo.
+Não houve varredura por Windows Defender.
 
-A compilação integral Gradle continua sem acesso às dependências Fabric. O JAR
-foi produzido por `tools/update/BuildUpdate.java`, que mantém a base remapeada,
-atualiza cinco classes existentes e insere duas classes auxiliares, sem embutir
-a ferramenta de build no produto. O manifesto registra o método incremental.
+## Conferência necessária no jogo
 
-O pacote distribuído contém somente o mod, instruções e verificações de hash.
-Não inclui corretor, instalador, scripts executáveis ou os substitutos da API.
-Não houve análise por Windows Defender nem confirmação sobre eventuais alertas.
+1. Instalar somente o JAR 1.1.1, Fabric API para 1.21.1, Java 21 e Loader 0.16.14+.
+2. Entrar em um mundo existente e em um novo; executar
+   `/locate structure djinns:djin_city_capital`, observar o movimento continuar
+   durante a busca, cancelar com `/djinns cancelar` e tentar em um deserto.
+3. Conferir a espada nas poses de repouso, preparação, corte e recuperação.
+4. Em Sobrevivência, atacar o rei e esperar cerca de três segundos a 20 TPS:
+   conferir fendas, guardas armados e perseguição. Em Criativo, o rei ignora o
+   jogador como alvo; esse comportamento já existia no mod.
+5. Conferir a navegação junto ao chão de djinns novos, invocados e já salvos.
+6. Repetir com o mesmo JAR no cliente e servidor dedicado.
 
-## Teste no jogo ainda necessário
-
-1. Substituir o mod antigo pela versão 1.1.0, usando Fabric/Minecraft 1.21.1.
-2. Entrar em um mundo e confirmar que não há regressão do erro de mixin.
-3. Localizar a vila em chunks novos de deserto com
-   `/locate structure djinns:djin_city_capital` e conferir terrenos, baús,
-   moradores, palácio e rei. Para um teste manual em área aberta, usar
-   `/place structure djinns:djin_city_capital ~ ~ ~`.
-4. Conferir o tamanho de cinco blocos do rei, poses de repouso, golpe,
-   conjuração, recuperação e espada acompanhando a mão, em diferentes FPS.
-5. Conferir o atributo de ataque total 10 sem encantamentos e antes de armadura,
-   o golpe em arco, fogo e fendas; repetir em um rei salvo de versão anterior.
-6. Testar negociação, pergaminhos, possessão e retorno do movimento após cinco
-   segundos, além de persistência após salvar/reabrir.
-7. Repetir em servidor dedicado com o mesmo JAR nos dois lados.
+A busca confirma candidatos dentro de um raio limitado e não certifica a
+capital mais próxima de todo o mundo. Sem resultado, tentar perto de um deserto.

@@ -146,10 +146,10 @@ def sword():
     model={'credit':'Original voxel geometry inspired by the supplied Riftblade reference',
            'ambientocclusion':False,'gui_light':'front','textures':{'blade':'djinns:item/royal_blade_atlas','particle':'djinns:item/royal_blade_atlas'},
            'elements':elements,'display':{
-               'thirdperson_righthand':{'rotation':[0,-90,55],'translation':[0,7,1],'scale':[.85,.85,.85]},
-               'thirdperson_lefthand':{'rotation':[0,90,-55],'translation':[0,7,1],'scale':[.85,.85,.85]},
-               'firstperson_righthand':{'rotation':[0,-90,20],'translation':[1,5,1],'scale':[.65,.65,.65]},
-               'firstperson_lefthand':{'rotation':[0,90,-20],'translation':[1,5,1],'scale':[.65,.65,.65]},
+               'thirdperson_righthand':{'rotation':[90,0,0],'translation':[1,-2,7.65],'scale':[.85,.85,.85]},
+               'thirdperson_lefthand':{'rotation':[90,0,0],'translation':[1,-2,7.65],'scale':[.85,.85,.85]},
+               'firstperson_righthand':{'rotation':[0,-10,-12],'translation':[.5,6,-1],'scale':[.65,.65,.65]},
+               'firstperson_lefthand':{'rotation':[0,10,12],'translation':[.5,6,-1],'scale':[.65,.65,.65]},
                'gui':{'rotation':[0,0,-42],'translation':[0,0,0],'scale':[.34,.34,.34]},
                'ground':{'rotation':[0,0,0],'translation':[0,6,0],'scale':[.4,.4,.4]},
                'fixed':{'rotation':[0,180,-42],'translation':[0,0,0],'scale':[.4,.4,.4]}}}
@@ -210,7 +210,7 @@ def city():
         setb(x+2,4,z+d-2,'red_carpet')
     def djinn(x,y,z,color,role,job=0,king=False):
         name='djinn_king' if king else f'{color}_{role}_djinn'
-        data={'id':(8,'djinns:'+name),'PersistenceRequired':(1,1),'NoGravity':(1,1),'DjinnJob':(3,job),
+        data={'id':(8,'djinns:'+name),'PersistenceRequired':(1,1),'NoGravity':(1,0),'DjinnJob':(3,job),
               'Rotation':(9,(5,[180.0,0.0])),
               'Health':(5,300.0 if king else 48.0 if role=='guard' else 36.0 if role=='mage' else 28.0)}
         if king or role in ['guard','mage']:
